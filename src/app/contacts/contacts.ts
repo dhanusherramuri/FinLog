@@ -159,13 +159,28 @@ export class Contacts implements OnInit {
         lastContact: new Date().toLocaleDateString('en-US')
       };
 
-      this.contacts.push(newEntry);
+      // this.contacts.push(newEntry);
 
-      this.applyFilters();
+      // this.applyFilters();
 
-      this.showModal = false;
+      // this.showModal = false;
 
-      this.userForm.reset();
+      // this.userForm.reset();
+
+      this.http.post<Contact>('http://localhost:3000/participants', newEntry).subscribe({
+        next: (savedContact) => {
+          // Add returned contact to local array
+          this.contacts.push(savedContact);
+          this.applyFilters();
+          this.showModal = false;
+          this.userForm.reset();
+          console.log('Contact saved:', savedContact);
+        },
+        error: (error) => {
+          console.error('Error saving contact:', error);
+          alert('Failed to save contact. Please try again.');
+        }
+      });
     } else {
       alert('Please fill all required fields correctly.');
     }
