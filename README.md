@@ -55,13 +55,10 @@ http://localhost:4200
 ## API Endpoints
 Here are the available endpoints based on the `db.json` data:
 
-| Method | Endpoint | Description |
-|--------|-----------|-------------|
-| GET | `/participants` | Fetch all participants |
-| GET | `/participants/:id` | Fetch a single participant by ID |
-| POST | `/participants` | Add a new participant |
-| PUT | `/participants/:id` | Update participant details |
-| DELETE | `/participants/:id` | Remove a participant |
+| Method | Endpoint                             | Description            |
+|--------|--------------------------------------|------------------------|
+| GET    | `http://localhost:3000/participants` | Fetch all participants |
+| POST   |`http://localhost:3000/participants`  | Add a new participant  |
 
 ---
 
