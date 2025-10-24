@@ -1,0 +1,136 @@
+/* ===== NAVBAR ===== */
+// .navbar {
+//   position: relative;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   background-color: #fff;
+//   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+//   padding: 1rem 2rem;
+//   border-radius: 8px;
+//   margin-bottom: 1.5rem;
+
+//   .menu-btn {
+//     font-size: 1.5rem;
+//     background: none;
+//     border: none;
+//     cursor: pointer;
+//     color: #6a1b9a;
+//   }
+// }
+
+/* Navbar */
+.navbar {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  transition: opacity 0.3s ease;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .menu-btn {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6a1b9a;
+  }
+}
+
+
+/* ===== PROFILE ICON (fixed top-right) ===== */
+.profile-icon {
+  position: fixed;
+  top: 1.2rem;
+  right: 2rem;
+  width: 45px;
+  height: 45px;
+  background-color: #6a1b9a;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 2000;
+}
+
+
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 190px;
+  height: 100vh;
+  background-color: #6a1b9a;
+  color: #fff;
+  padding: 2rem 1.5rem 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  transition: left 0.35s ease;
+  z-index: 1600;
+
+  &.open {
+    left: 0;
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .close-btn {
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0 5px;
+    position: relative;
+    left: 0;
+  }
+
+  .sidebar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    a {
+      color: #f1e6fa;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #fff;
+      }
+
+      &.active {
+        color: #fff;
+        font-weight: 700;
+        border-left: 4px solid #fff;
+        padding-left: 8px;
+      }
+    }
+  }
+}
