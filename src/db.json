@@ -2,11 +2,13 @@
   "participants": [
     {
       "id": "1",
-      "name": "Olivia",
+      "name": "Olive",
       "email": "olivia1@untitledui.com",
-      "ndis": "78797",
+      "ndis": "787978956",
       "state": "Victoria",
-      "status": "Active"
+      "status": "Active",
+      "role": "Participant",
+      "lastContact": "10/24/2025"
     },
     {
       "id": "2",

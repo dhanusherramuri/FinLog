@@ -35,6 +35,11 @@ export class Contacts implements OnInit {
     serviceType: new FormControl('Disability Care')
   });
 
+  selectedContacts: Set<number> = new Set(); // track selected checkboxes
+  viewToggled: Record<string, boolean> = {}; // track if view is toggled for a contact
+  editingContact: Contact | null = null; // track the contact being edited
+  showEditModal = false;
+
   showModal = false;
   isLead = false;
   searchText: string = '';
@@ -50,6 +55,66 @@ export class Contacts implements OnInit {
   ngOnInit() {
     this.loadContacts();
   }
+
+  toggleSelection(contactId: string | number, event: Event) {
+    const id = Number(contactId); // convert to number safely
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      this.selectedContacts.add(id);
+    } else {
+      this.selectedContacts.delete(id);
+    }
+  }
+
+
+
+  toggleView(contactId: number|string) {
+    const key = String(contactId);
+    this.viewToggled[key] = !this.viewToggled[key];
+  }
+  openEdit(contact: Contact) {
+    this.editingContact = { ...contact }; // clone contact to avoid direct mutation
+    this.userForm.patchValue(this.editingContact);
+    this.showEditModal = true;
+  }
+
+  saveEditedEntry() {
+    if (this.userForm.valid && this.editingContact) {
+      const formValue = this.userForm.value;
+
+      const updatedContact: Contact = {
+        ...this.editingContact,
+        name: formValue.name ?? '',
+        ndis: formValue.ndis ?? '',
+        state: formValue.state ?? '',
+        status: formValue.status ?? '',
+        email: formValue.email ?? '',
+        // phone: formValue.phone ?? '',
+        lastContact: new Date().toLocaleDateString('en-US')
+      };
+
+      this.http.put<Contact>(
+        `http://localhost:3000/participants/${this.editingContact.id}`,
+        updatedContact
+      ).subscribe({
+        next: (saved) => {
+          const index = this.contacts.findIndex(c => c.id === saved.id);
+          if (index !== -1) this.contacts[index] = saved;
+          this.applyFilters();
+          this.showEditModal = false;
+          this.userForm.reset();
+          this.editingContact = null;
+        },
+        error: (err) => {
+          console.error('Error updating contact:', err);
+          alert('Failed to update contact. Please try again.');
+        }
+      });
+    } else {
+      alert('Please fill all required fields correctly.');
+    }
+  }
+
 
   loadContacts() {
     this.isLoading = true;
@@ -127,25 +192,6 @@ export class Contacts implements OnInit {
     this.showModal = false;
   }
 
-  // saveEntry() {
-  //       if (this.userForm.valid) {
-  //         const newEntry = {
-  //           role: this.isLead ? 'lead' : 'participant',
-  //           name: this.userForm.value.name,
-  //           id: this.userForm.value.ndis,
-  //           state: this.userForm.value.state,
-  //           status: this.userForm.value.status,
-  //           email: this.userForm.value.email || 'No Email',
-  //           serviceType: this.userForm.value.serviceType,
-  //           lastContacted: new Date().toLocaleDateString('en-US'),
-  //           staff: 'Sarah Taylor'
-  //         };
-  //         this.usersArray.push(newEntry);
-  //         this.showModal = false;
-  //       } else {
-  //         alert('Please fill all required fields correctly.');
-  //       }
-  //     }
   saveEntry() {
     if (this.userForm.valid) {
       const newEntry: Contact = {
@@ -158,14 +204,6 @@ export class Contacts implements OnInit {
         ndis: this.userForm.value.ndis || undefined,
         lastContact: new Date().toLocaleDateString('en-US')
       };
-
-      // this.contacts.push(newEntry);
-
-      // this.applyFilters();
-
-      // this.showModal = false;
-
-      // this.userForm.reset();
 
       this.http.post<Contact>('http://localhost:3000/participants', newEntry).subscribe({
         next: (savedContact) => {

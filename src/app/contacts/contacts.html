@@ -141,7 +141,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let contact of filteredContacts">
-          <td><input type="checkbox" /></td>
+          <td><input
+            type="checkbox"
+            (change)="toggleSelection(contact.id, $event)"
+          /></td>
           <td>
             <div class="contact-name">
               <div class="avatar">{{ getInitials(contact.name) }}</div>
@@ -152,10 +155,32 @@
             </div>
           </td>
           <td>
-            <div class="contact-info">
+            <!-- <div class="contact-info">
               <div>{{ contact.email || 'No email' }}</div>
               <div class="phone">{{ contact.phone || contact.ndis }}</div>
+            </div> -->
+            <div class="contact-info">
+              <!-- EMAIL -->
+              <div>
+                <ng-container *ngIf="viewToggled[contact.id]; else hiddenEmail">
+                  {{ contact.email || 'No email' }}
+                </ng-container>
+                <ng-template #hiddenEmail>
+                  ••••••••••
+                </ng-template>
+              </div>
+
+              <!-- NDIS / PHONE -->
+              <div class="phone">
+                <ng-container *ngIf="viewToggled[contact.id]; else hiddenNdis">
+                  {{ contact.phone || contact.ndis || 'No contact' }}
+                </ng-container>
+                <ng-template #hiddenNdis>
+                  ••••••••••
+                </ng-template>
+              </div>
             </div>
+
           </td>
           <td>
             <span class="status-badge" [class.active]="contact.status === 'Active'"
@@ -166,15 +191,67 @@
           <td>{{ contact.lastContact || 'Jan 6, 2025' }}</td>
           <td>
             <div class="actions">
-              <button class="icon-btn" title="View">👁</button>
-              <button class="icon-btn" title="Edit">✏️</button>
+              <button
+                class="icon-btn"
+                title="View"
+                [disabled]="!selectedContacts.has(+contact.id)"
+                (click)="toggleView(+contact.id)">
+                👁
+              </button>
+
+              <button
+                class="icon-btn"
+                title="Edit"
+                [disabled]="!selectedContacts.has(+contact.id)"
+                (click)="openEdit(contact)">
+                ✏️
+              </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
 
+    <div class="modal-backdrop" *ngIf="showEditModal">
+      <div class="modal">
+        <h3>Edit Contact</h3>
+        <form [formGroup]="userForm" (ngSubmit)="saveEditedEntry()">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name *</label>
+              <input type="text" formControlName="name" />
+            </div>
+            <div class="form-group">
+              <label>NDIS Number *</label>
+              <input type="text" formControlName="ndis" />
+            </div>
+          </div>
 
+          <div class="form-row">
+            <div class="form-group">
+              <label>State *</label>
+              <input type="text" formControlName="state" />
+            </div>
+            <div class="form-group">
+              <label>Status *</label>
+              <input type="text" formControlName="status" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" formControlName="email" />
+            </div>
+          </div>
+
+          <div class="modal-buttons">
+            <button type="submit" class="btn-purple">Save Changes</button>
+            <button type="button" class="btn-outline" (click)="showEditModal = false">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <div *ngIf="isLoading" class="loading">
       <div class="spinner"></div>
