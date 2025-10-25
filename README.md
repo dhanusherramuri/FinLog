@@ -29,6 +29,9 @@ npm install
 ```
 
 ### Step 3: Start the JSON Server
+Change the directory to where the db.json file is present :
+``` cd src```
+
 Run this command to start the mock API:
 ```bash
 npx json-server --watch db.json --port 3000

@@ -1,34 +1,92 @@
 <div class="form-container">
   <div class="form-header">
     <h2>Participants</h2>
-    <button type="submit" class="add-btn" (click)="displayValue()">+ Add Participant</button>
+    <button type="submit" class="add-btn" (click)="openModal()">+ Add Participant</button>
   </div>
 
-  <!-- <form [formGroup]="userForm">
-    <div class="form-row">
-      <div class="form-group">
-        <label>Participant Name *</label>
-        <input type="text" formControlName="name" placeholder="olivia@untitledui.com" />
-      </div>
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h3>Add Participant</h3>
 
-      <div class="form-group">
-        <label>NDIS Number *</label>
-        <input type="text" formControlName="ndis" placeholder="78797" />
-      </div>
+      <form [formGroup]="userForm" (ngSubmit)="displayValue()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Participant Name *</label>
+            <input
+              type="text"
+              formControlName="name"
+              placeholder="Sarah Johnson"
+              (input)="onNameInput($event)"
+            />
+            <small
+              class="error"
+              *ngIf="userForm.get('name')?.touched && userForm.get('name')?.invalid"
+            >
+              Only alphabets and "." allowed
+            </small>
+          </div>
 
-      <div class="form-group">
-        <label>State *</label>
-        <input type="text" formControlName="state" placeholder="Victoria" />
-      </div>
+          <div class="form-group">
+            <label>NDIS Number *</label>
+            <input
+              type="text"
+              formControlName="ndis"
+              placeholder="123456789"
+              maxlength="9"
+              (input)="onNdisInput($event)"
+            />
+            <small
+              class="error"
+              *ngIf="userForm.get('ndis')?.touched && userForm.get('ndis')?.invalid"
+            >
+              Must be 9 digits only
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>State *</label>
+            <input
+              type="text"
+              formControlName="state"
+              placeholder="Victoria"
+              (input)="onStateInput($event)"
+            />
+            <small
+              class="error"
+              *ngIf="userForm.get('state')?.touched && userForm.get('state')?.invalid"
+            >
+              Alphabets only
+            </small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group status-group">
+            <label>Status *</label>
+            <input
+              type="text"
+              formControlName="status"
+              placeholder="Active"
+              (input)="onStatusInput($event)"
+            />
+            <small
+              class="error"
+              *ngIf="userForm.get('status')?.touched && userForm.get('status')?.invalid"
+            >
+              Alphabets only
+            </small>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button type="submit" class="btn-purple">Submit</button>
+          <button type="button" class="btn-outline" (click)="closeModal()">Cancel</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <div class="form-row">
-      <div class="form-group status-group">
-        <label>Status *</label>
-        <input type="text" formControlName="status" placeholder="Active" />
-      </div>
-    </div>
-  </form> -->
+
   <form [formGroup]="userForm">
     <div class="form-row">
       <div class="form-group">

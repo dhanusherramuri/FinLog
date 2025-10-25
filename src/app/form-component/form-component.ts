@@ -18,7 +18,7 @@ export class FormComponent {
   pageSize = 10
   currentPage = 1;
   totalPages = 0;
-
+  showModal = false;
   userForm = new FormGroup({
     name: new FormControl('', [
       Validators.required,
@@ -131,6 +131,16 @@ export class FormComponent {
     if (this.currentPage < this.totalPages) {
       this.loadPage(this.currentPage + 1);
     }
+  }
+
+
+  openModal() {
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.userForm.reset();
   }
 
 }
