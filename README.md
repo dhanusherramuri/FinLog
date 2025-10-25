@@ -30,7 +30,9 @@ npm install
 
 ### Step 3: Start the JSON Server
 Change the directory to where the db.json file is present :
-``` cd src```
+``` 
+cd src
+```
 
 Run this command to start the mock API:
 ```bash
